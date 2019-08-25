@@ -2,12 +2,16 @@
 from src.toolComponents.quartz.BasizQuartz import BasicQuartz
 import uuid
 
-from src.toolComponents.quartz.test.quartzTest import quartzTest
+
 
 
 class ManagerReader(BasicQuartz):
+    def __init__(self):
+        super().__init__()
+        print("managerReader inited")
+    __quartzBuffer = None
     quartz = {
-        "interval": 2,
+        "interval": 1,
         "name": "Manager Reader",
         "key": uuid.uuid1(),
         "content": {
@@ -15,7 +19,7 @@ class ManagerReader(BasicQuartz):
         }
     }
     def loop(self):
-        print(self.quartzManager.getCommonQuartz())
-
-quartzTest()
-ManagerReader()
+        # print(self.quartzManager.getCommonQuartz())
+        self.__quartzBuffer = self.quartzManager.getCommonQuartz()
+    def getQuartz(self):
+        return self.quartzManager.getCommonQuartz()

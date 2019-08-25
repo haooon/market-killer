@@ -7,14 +7,18 @@ from src.toolComponents.quartz.BasizQuartz import BasicQuartz
 
 
 class quartzTest(BasicQuartz):
+    def __init__(self):
+        super().__init__()
+        print("quartzTest inited")
     quartz = {
-        "interval": 1,
+        "interval": 5,
         "name": "11111test",
-        "key": uuid.uuid1(),
+        "delay": False,
+        "key": str(uuid.uuid1()),
         "content": {
             "describe": "11111test quartz",
         }
     }
     # delay = True
     def loop(self):
-        print("1111111111111111111111111111")
+        print("test quartz")

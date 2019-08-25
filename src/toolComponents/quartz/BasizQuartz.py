@@ -6,7 +6,7 @@ import uuid
 
 class BasicQuartz():
     # 定时器管理器
-    quartzManager = QuartzManager()
+    quartzManager = None
     quartz = {
         # 时间间隔默认5秒
         # *** 修改需要继承后重写 ***
@@ -14,7 +14,7 @@ class BasicQuartz():
         # 延迟选项 非延迟 修改需要继承后重写
         "delay":False,
         "name":"default",
-        "key":uuid.uuid1(),
+        "key":str(uuid.uuid1()),
         "content": {
             "describe":"default",
         }
@@ -38,6 +38,7 @@ class BasicQuartz():
     def threadLoop(self):
         threading.Thread(target=self.loop, args=()).start()
     def __init__(self):
+        self.quartzManager = QuartzManager()
         # 判断是否延迟模式
         if "delay" in self.quartz.keys():
             if self.quartz["delay"]:
@@ -48,15 +49,14 @@ class BasicQuartz():
                 schedule.every(self.quartz["interval"]).seconds.do(self.threadLoop)
         else:
             schedule.every(self.quartz["interval"]).seconds.do(self.threadLoop)
-        self.__quartz = threading.Thread(target=self.run, args=())
-        self.__quartz.start()
-
+        # self.__quartz = threading.Thread(target=self.run, args=())
+        # self.__quartz.start()
         # 注册定时器
 
         # 绑定时钟对象
         self.quartz["quartz"] = self
         self.quartzManager.register(self.quartz)
-
+        print("basic quartz inited ")
     # 获取定时器线程
     def getQuartz(self):
         return self.__quartz
