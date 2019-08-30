@@ -1,8 +1,7 @@
 # -*- utf-8 -*-
-import time
-
 from src.toolComponents.surveillance.Constant import CONSTANT
 from src.toolComponents.task.TaskInterface import Task
+import time
 
 
 class TestTasks(Task):

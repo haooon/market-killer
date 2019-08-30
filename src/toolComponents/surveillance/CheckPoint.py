@@ -15,17 +15,16 @@ class TestTask(Task):
         if ... :
             return CONSTANT.CHECKPOINT.HAPPY
         else:
-            CONSTANT.CHECKPOINT.SAD
+            return CONSTANT.CHECKPOINT.SAD
 """
 from src.toolComponents.List.LenLimitList import LenLimitList
-from src.toolComponents.decorator.Decorator import Singleton
 import time
 
 from src.toolComponents.surveillance.Constant import CONSTANT
 
 
 def checkPoint(name="default", correct=None):
-    def check_expect(func):
+    def check_compose(func):
         def wrapper(*args, **kwargs):
             # 第一位传入参数为self 为继承了 Task类 的任务类
             # 因为 Task类 继承了 Check类 所以可用self调用 Check类中方法
@@ -41,7 +40,7 @@ def checkPoint(name="default", correct=None):
 
         return wrapper
 
-    return check_expect
+    return check_compose
 
 
 class Check:
