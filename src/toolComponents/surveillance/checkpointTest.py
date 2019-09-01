@@ -1,6 +1,6 @@
 # -*- utf-8 -*-
 from src.toolComponents.surveillance.Constant import CONSTANT
-from src.toolComponents.task.TaskInterface import Task
+from src.toolComponents.task.Task import Task
 import time
 
 

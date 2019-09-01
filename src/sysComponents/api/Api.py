@@ -1,21 +1,38 @@
 # -*- utf-8 -*-
+from src.toolComponents.surveillance.Constant import CONSTANT
+from src.toolComponents.task.TaskManager import TaskManager
+from src.toolComponents.task.Task import Task
 from flask import Flask
 import threading
-import flask
+
+# 实例化Flask对象
+app = Flask("name")
 
 
-class Api:
-    # 实例化Flask对象
-    app = Flask(__name__)
+@app.route('/test')
+def index():
+    return "test"
+
+
+@app.route('/task')  # @decorator
+def task():
+    taskmanaget = TaskManager()
+    return str(taskmanaget.get_task_dict())
+
+
+class Api(Task):
+    __app = app
+    info = {
+        "name": "API",
+        "status": CONSTANT.TASK.RUNNING,
+        "health": 100
+    }
 
     def __init__(self):
-        # 启动api服务监听
+        super().__init__()
+        # threading.Thread(target=self.run).start()
         self.run()
 
-    # 生成路由关系，并把关系保存到某个地方,app对象的 url_map字段中
-    @app.route('/test')  # @decorator
-    def index(self):
-        return "test"
-
     def run(self):
-        threading.Thread(target=self.app.run).start()
+        app.run(host="0.0.0.0", port=5000, threaded=True)
+        print("3113221313221313221313")

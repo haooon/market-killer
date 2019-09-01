@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from src.toolComponents.quartz.QuartzManager import QuartzManager
-from src.toolComponents.task.TaskInterface import Task
+from src.toolComponents.task.Task import Task
 import schedule
 import threading
 import uuid
@@ -33,10 +33,13 @@ class Quartz(Task):
     def thread_loop(self):
         threading.Thread(target=self.loop).start()
 
-    def __init__(self):
-        super().__init__()
-        print("123123123")
-        self.quartzManager = QuartzManager()
+    def __init__(*args):
+        self = args[0]
+        if args.__len__() > 1:
+            super(Quartz, self).__init__(args[1])
+        else:
+            super(Quartz, self).__init__()
+        self.quartz_manager = QuartzManager()
         # 判断是否延迟模式
         if "delay" in self.quartz.keys():
             if self.quartz["delay"]:
@@ -53,7 +56,6 @@ class Quartz(Task):
 
         # 绑定时钟对象
         # self.quartzManager.register(self.quartz)
-        print("basic quartz inited ")
 
     # 获取定时器线程
     def getQuartz(self):
