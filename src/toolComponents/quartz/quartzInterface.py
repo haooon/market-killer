@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-# from src.toolComponents.quartz.ManagerReader import ManagerReader
 from src.toolComponents.quartz.test.quartzTest import quartzTest
 from flask import Flask, request
 

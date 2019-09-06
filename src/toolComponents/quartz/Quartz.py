@@ -3,7 +3,6 @@ from src.toolComponents.quartz.QuartzManager import QuartzManager
 from src.toolComponents.task.Task import Task
 import schedule
 import threading
-import uuid
 
 
 class Quartz(Task):
@@ -33,13 +32,8 @@ class Quartz(Task):
     def thread_loop(self):
         threading.Thread(target=self.loop).start()
 
-    def __init__(*args):
-        self = args[0]
-        if args.__len__() > 1:
-            super(Quartz, self).__init__(args[1])
-        else:
-            super(Quartz, self).__init__()
-        self.quartz_manager = QuartzManager()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         # 判断是否延迟模式
         if "delay" in self.quartz.keys():
             if self.quartz["delay"]:

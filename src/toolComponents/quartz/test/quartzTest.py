@@ -6,25 +6,17 @@ from src.toolComponents.surveillance.Constant import CONSTANT
 from src.toolComponents.task.Task import Task
 
 class Trrrs(Task):
-    info = {
-        "name": "Trrrs",
-        "status": CONSTANT.TASK.RUNNING,
-        "health": 100
-    }
+    pass
 
 class TestTasks(Task):
-    # def __init__(self, fatherTask):
-    #     print("self: ", self)
-    #     super().__init__()
-    #     # if kwargs["key"] != None:
-    #     #     self.test = Trrrs(self.KEY)
-    #     # else:
-    #     self.test = Trrrs()
+    testrrr = None
+    def mount(self):
+        self.testrrr = Trrrs().init(self.KEY)
+        self.testrrr = Trrrs().init(self.KEY)
+        self.testrrr = Trrrs().init(self.KEY)
 
     info = {
         "name": "TestTasks",
-        "status": CONSTANT.TASK.RUNNING,
-        "health": 100
     }
     @Task.CheckPoint("get_data_correct")
     def get_data_correct(self, param):
@@ -40,13 +32,16 @@ class TestTasks(Task):
         return CONSTANT.CHECKPOINT.HAPPY
 
 class quartzTest(Quartz):
-    # def __init__(self):
-    #     super().__init__()
-    #     print(self.KEY)
+    testTasks = None
+    testTasks1 = None
+    def mount(self):
+        self.testTasks = TestTasks().init(self.KEY)
+
+        self.tresrtrrr = Trrrs().init(self.KEY)
+        self.testTasks1 = TestTasks().init(self.KEY)
+
     info = {
         "name": "quartzTest",
-        "status": CONSTANT.TASK.RUNNING,
-        "health": 100
     }
 
     quartz = {
@@ -69,15 +64,20 @@ class quartzTest(Quartz):
     # delay = True
     @Quartz.CheckPoint("quartz test")
     def loop(self):
-        TestTasks(self.KEY)
         self.get()
         # print("test quartz")
         return CONSTANT.CHECKPOINT.HAPPY
 
 
-# from src.toolComponents.task.TaskManager import TaskManager
-# # quartz_test = quartzTest()
-# # mana = TaskManager()
-# # print(mana.get_task_list())
-# # time.sleep(2)
-# # print(mana.get_task_dict())
+from src.toolComponents.task.TaskManager import TaskManager
+quartz_test = quartzTest().init()
+mana = TaskManager()
+print(mana.get_task_list())
+
+print(mana.get_task_dict())
+print(TaskManager().health())
+
+quartz_test.info["health"] = 0
+
+print(mana.get_task_dict())
+print(TaskManager().health())
