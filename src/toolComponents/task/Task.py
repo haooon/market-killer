@@ -4,9 +4,9 @@ from src.toolComponents.task.TaskManager import TaskManager
 
 
 class Task(Check):
+    info = None
     def init(self, *args, **kwargs):
-        print(args)
-        print(kwargs)
+        self.info = {}
         if args.__len__() == 0:
             if "father" in kwargs.keys():
                 father_key = kwargs["father"]
@@ -17,7 +17,6 @@ class Task(Check):
                 self.KEY = __manager.register(self)
         else:
             father_key = args[0]
-            print("father key:====> ", father_key)
             __manager = TaskManager()
             self.KEY = __manager.register(self, father_key)
         pass
@@ -31,8 +30,6 @@ class Task(Check):
         super().__init__()
 
     CheckPoint = Check.CheckPoint
-    info = {
-    }
     KEY = None
 
     def get_info(self):

@@ -53,7 +53,6 @@ class TaskManager:
                 if tmp_task["info"]["key"] == father_key:
                     task.info["father"] = father_key
                     tmp_task["info"]["kids"].append({"info": task.info})
-                    print("insert son insert son insert son insert son", task.info["name"])
                     break
         else:
             self.__task_dict.append({"info": task.info})

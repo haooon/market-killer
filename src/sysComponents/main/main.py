@@ -2,6 +2,7 @@
 from flask import Flask
 
 from src.sysComponents.api.Api import Api
+from src.toolComponents.quartz.QuartzManager import QuartzManager
 from src.toolComponents.quartz.test.quartzTest import quartzTest
 from src.toolComponents.surveillance.Constant import CONSTANT
 from src.toolComponents.task.Task import Task
@@ -15,18 +16,12 @@ class Main(Task):
         "health": 100
     }
 
-    def job(self):
-        quartzTest()
-
-    def __init__(self):
-        super().__init__()
-        task_manager = TaskManager()
-        self.job()
-        print(task_manager.get_task_dict())
-        api = Api()
+    def run(self):
+        quartzTest().init()
+        api = Api().init(self.KEY)
 
 
 if __name__ == '__main__':
-    Main()
+    Main().init().run()
     while True:
         pass

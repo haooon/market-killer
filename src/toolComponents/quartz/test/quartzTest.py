@@ -5,7 +5,14 @@ from src.toolComponents.quartz.Quartz import Quartz
 from src.toolComponents.surveillance.Constant import CONSTANT
 from src.toolComponents.task.Task import Task
 
+class TTesttttt(Task):
+    pass
+
 class Trrrs(Task):
+    eee = None
+    def mount(self):
+        self.eee = TTesttttt().init(self.KEY)
+        self.eee = TTesttttt().init(self.KEY)
     pass
 
 class TestTasks(Task):
@@ -68,16 +75,16 @@ class quartzTest(Quartz):
         # print("test quartz")
         return CONSTANT.CHECKPOINT.HAPPY
 
-
-from src.toolComponents.task.TaskManager import TaskManager
-quartz_test = quartzTest().init()
-mana = TaskManager()
-print(mana.get_task_list())
-
-print(mana.get_task_dict())
-print(TaskManager().health())
-
-quartz_test.info["health"] = 0
-
-print(mana.get_task_dict())
-print(TaskManager().health())
+#
+# from src.toolComponents.task.TaskManager import TaskManager
+# quartz_test = quartzTest().init()
+# mana = TaskManager()
+# print(mana.get_task_list())
+#
+# print(mana.get_task_dict())
+# print(TaskManager().health())
+#
+# quartz_test.info["health"] = 0
+#
+# print(mana.get_task_dict())
+# print(TaskManager().health())
