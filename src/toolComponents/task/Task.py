@@ -6,24 +6,25 @@ from src.toolComponents.task.TaskManager import TaskManager
 class Task(Check):
     info = None
     def init(self, *args, **kwargs):
+        __manager = TaskManager()
         self.info = {}
         if args.__len__() == 0:
             if "father" in kwargs.keys():
                 father_key = kwargs["father"]
-                __manager = TaskManager()
                 self.KEY = __manager.register(self, father_key)
             else:
-                __manager = TaskManager()
                 self.KEY = __manager.register(self)
         else:
             father_key = args[0]
-            __manager = TaskManager()
             self.KEY = __manager.register(self, father_key)
-        pass
         self.mount()
+        self.handle()
         return self
 
     def mount(self):
+        pass
+
+    def handle(self):
         pass
 
     def __init__(self):

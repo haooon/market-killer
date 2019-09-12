@@ -7,6 +7,7 @@ from src.toolComponents.surveillance.Constant import CONSTANT
 
 @Singleton
 class TaskManager:
+    __main_key = None
     __task_dict = None
     __task_list = None
     info = {
@@ -16,6 +17,7 @@ class TaskManager:
     }
 
     def __init__(self):
+        __main_key = ""
         self.__task_list = []
         self.__task_dict = []
         self.__task = {}
@@ -46,7 +48,7 @@ class TaskManager:
         if "status" not in task.info.keys():
             task.info["status"] = CONSTANT.TASK.RUNNING
         if "health" not in task.info.keys():
-            task.info["health"] = 100
+            task.info["health"] = CONSTANT.TASK.BASIC_HEALTH
         if args.__len__() > 2:
             father_key = args[2]
             for tmp_task in self.__task_list:
@@ -58,16 +60,31 @@ class TaskManager:
             self.__task_dict.append({"info": task.info})
         self.__task[key] = task
         self.__task_list.append({"info": task.info})
+        print("register: ", task.info["name"])
+        if task.info["name"] in ['main', 'Main']:
+            self.__main_key = key
         return key
 
     def get_task_list(self):
         return self.__task_list
 
+    def get_main(self):
+        return self.__task[self.__main_key]
+
+    def get(self, key):
+        return self.__task[key]
+
+    def suspend_task(self, key):
+        self.__task[key].info["status"] = CONSTANT.TASK.SUSPEND
+        self.__task[key].info["health"] = 50
+        return {"info": self.__task[key].info}
+
     def get_task_dict(self):
-        main = {"info": {
-            "name": "main",
-            "status": CONSTANT.TASK.RUNNING,
-            "health": 100,
-            "kids": self.__task_dict
-        }}
-        return main
+        return self.__task_dict[0]
+        # main = {"info": {
+        #     "name": "main",
+        #     "status": CONSTANT.TASK.RUNNING,
+        #     "health": 100,
+        #     "kids": self.__task_dict
+        # }}
+        # return main

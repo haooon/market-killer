@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 import threading
+import time
+
 import schedule
 from src.toolComponents.pool.ContentPool.ContentPool import ContentPool
 from src.toolComponents.decorator.Decorator import *
@@ -10,12 +12,14 @@ from src.toolComponents.decorator.Decorator import *
 class QuartzManager:
     # 用于注册定时器
     __quartz_dict = {}
-
+    __quartz_list = []
     # 初始化管理工具
     # 初始化内容池
     # 初始化定时器
     def __init__(self):
         self.__quartz_dict = {}
+        self.__quartz_list = {}
+        # time.sleep(2)
         threading.Thread(target=self.run).start()
 
     def get_quartz_dict(self):
@@ -26,6 +30,7 @@ class QuartzManager:
             schedule.run_pending()
 
     # 注册新的定时器
-    def register(self, quartz):
-        key = quartz["key"]
-        self.__quartz_dict[key] = quartz
+    def register(self, info, quartz):
+        key = info["key"]
+        self.__quartz_list[key] = quartz
+        self.__quartz_dict[key] = info

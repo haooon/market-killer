@@ -43,7 +43,6 @@ class quartzTest(Quartz):
     testTasks1 = None
     def mount(self):
         self.testTasks = TestTasks().init(self.KEY)
-
         self.tresrtrrr = Trrrs().init(self.KEY)
         self.testTasks1 = TestTasks().init(self.KEY)
 

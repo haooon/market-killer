@@ -24,6 +24,8 @@ class TASK:
     SUSPEND = "SUSPEND"
     # 任务运行状态：死亡
     DEAD = "DEAD"
+    # 基础健康度
+    BASIC_HEALTH = 80
 
 @Singleton
 class CONSTANT:
