@@ -76,7 +76,16 @@ class TaskManager:
 
     def suspend_task(self, key):
         self.__task[key].info["status"] = CONSTANT.TASK.SUSPEND
-        self.__task[key].info["health"] = 50
+        # self.__task[key].info["health"] = 50
+        for task in self.__task[key].info["kids"]:
+            self.suspend_task(task["info"]["key"])
+        return {"info": self.__task[key].info}
+
+    def restart_task(self, key):
+        self.__task[key].info["status"] = CONSTANT.TASK.RUNNING
+        # self.__task[key].info["health"] = 50
+        for task in self.__task[key].info["kids"]:
+            self.restart_task(task["info"]["key"])
         return {"info": self.__task[key].info}
 
     def get_task_dict(self):

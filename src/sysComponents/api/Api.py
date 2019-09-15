@@ -44,6 +44,12 @@ def task_suspend():
     key = request.args.get("key")
     return TaskManager().suspend_task(key)
 
+@app.route('/restart', methods=['GET'])
+def task_restart():
+    # key = request.form.get("key")
+    key = request.args.get("key")
+    return TaskManager().restart_task(key)
+
 class Api(Task):
     __app = app
 

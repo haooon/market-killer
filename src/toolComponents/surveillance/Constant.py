@@ -25,7 +25,7 @@ class TASK:
     # 任务运行状态：死亡
     DEAD = "DEAD"
     # 基础健康度
-    BASIC_HEALTH = 80
+    BASIC_HEALTH = 100
 
 @Singleton
 class CONSTANT:
