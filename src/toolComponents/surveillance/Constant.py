@@ -27,12 +27,31 @@ class TASK:
     # 基础健康度
     BASIC_HEALTH = 100
 
+
+@Singleton
+class MONGO:
+    # 地址
+    URL = "39.105.99.88"
+    # 端口
+    PORT = "27017"
+    # 用户名
+    USER = "haooon"
+    # 密码
+    PASSWORD = "1141135276Shr"
+    # 库
+    DATABASE = "app"
+    COLLECTIONS = [
+        "test",
+    ]
+
 @Singleton
 class CONSTANT:
     # 健康检查点用 变量值
     CHECKPOINT = CHECKPOINT()
     # 任务
     TASK = TASK()
+    # mongo数据库
+    MONGO = MONGO()
     # 系统用 变量值
     DEBUG = True
 

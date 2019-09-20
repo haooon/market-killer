@@ -1,5 +1,6 @@
 # -*- utf-8 -*-
 from src.toolComponents.surveillance.CheckPoint import Check
+from src.toolComponents.surveillance.Constant import CONSTANT
 from src.toolComponents.task.TaskManager import TaskManager
 
 
@@ -21,6 +22,10 @@ class Task(Check):
         self.handle()
         return self
 
+    def print(self, content):
+        if CONSTANT.DEBUG:
+            print("[DEBUG] ==> " + content)
+
     def mount(self):
         pass
 
@@ -37,4 +42,4 @@ class Task(Check):
         return self.info
 
     def __del__(self):
-        print("del")
+        self.print("del object")
