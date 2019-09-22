@@ -45,6 +45,11 @@ class MONGO:
     ]
 
 @Singleton
+class ProxyPool:
+    # 地址
+    URL = "http://39.105.99.88:8899/api/v1/proxies?limit=9999"
+
+@Singleton
 class CONSTANT:
     # 健康检查点用 变量值
     CHECKPOINT = CHECKPOINT()
@@ -52,6 +57,8 @@ class CONSTANT:
     TASK = TASK()
     # mongo数据库
     MONGO = MONGO()
+    # 代理
+    PROXYPOOL = ProxyPool()
     # 系统用 变量值
     DEBUG = True
 

@@ -1,66 +1,49 @@
 # -*- utf-8 -*-
+import json
+
+from src.toolComponents.surveillance.Constant import CONSTANT
+from src.toolComponents.quartz.Quartz import Quartz
+import requests
 import random
 
-from src.toolComponents.task.Task import Task
-from bs4 import BeautifulSoup
-import requests
-import urllib
 
-class ProxyPoolTask(Task):
-    headers = {
-        "Cookie": '_free_proxy_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVEkiJTBiMTU4NjU0NzBmYzIwMGI3NTgwYmM4NzZlNGI4M2MwBjsAVEkiEF9jc3JmX3Rva2VuBjsARkkiMVBoUzJUSEQ1eERUK3VsdE5LUVNLbm5yWHR4NThRMThhM0JNbUtObW52Vlk9BjsARg%3D%3D--ffc164116ca44528f7ea23e5891298b9e844c9d7; Hm_lvt_0cf76c77469e965d2957f0553e6ecf59=1568968970; Hm_lpvt_0cf76c77469e965d2957f0553e6ecf59=1568969007',
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": 'zh-CN,zh;q=0.9',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
 
+class ProxyPoolTask(Quartz):
+    proxy_pool = None
+
+    quartz_info = {
+        "interval": 60 * 5
     }
-    url = "http://www.xicidaili.com/nn/"
-    ip_list = []
 
-    def __getHTMLText(self, url, proxies):
-        try:
-            r = requests.get(url, proxies=proxies)
-            r.raise_for_status()
-            r.encoding = r.apparent_encoding
-        except:
-            return 0
-        else:
-            return r.text
+    def loop(self):
+        self.handle()
+        pass
 
-    def __get_ip_list(self):
-        web_data = requests.get(self.url, self.headers)
-        print(web_data.content)
-        soup = BeautifulSoup(web_data.text, 'html')
-        ips = soup.find_all('tr')
-        ip_list = []
-        for i in range(1, len(ips)):
-            ip_info = ips[i]
-            tds = ip_info.find_all('td')
-            ip_list.append(tds[1].text + ':' + tds[2].text)
-        # 检测ip可用性，移除不可用ip：（这里其实总会出问题，你移除的ip可能只是暂时不能用，剩下的ip使用一次后可能之后也未必能用）
-        for ip in ip_list:
-            try:
-                proxy_host = "https://" + ip
-                proxy_temp = {"https": proxy_host}
-                res = urllib.urlopen(self.url, proxies=proxy_temp).read()
-            except Exception as e:
-                ip_list.remove(ip)
-                continue
-        return ip_list
-
-    def get_proxy(self):
-        proxy_list = []
-        for ip in self.ip_list:
-            proxy_list.append('http://' + ip)
-        proxy_ip = random.choice(proxy_list)
-        proxies = {'http': proxy_ip}
-        return proxies
+    def mount(self):
+        pass
 
     def handle(self):
-        self.url = 'http://www.xicidaili.com/nn/'
-        self.ip_list = self.__get_ip_list()
+        self.proxy_pool = json.loads(requests.get(CONSTANT.PROXYPOOL.URL).content)["proxies"]
+        for proxy in self.proxy_pool:
+            self.print("load proxy: " + proxy['ip'] + ':' + str(proxy['port']))
 
-proxy = ProxyPoolTask().init()
-for i in range(10):
-    print(proxy.get_proxy())
+    def get(self):
+        proxy = self.print(self.proxy_pool[random.randint(0, self.proxy_pool.__len__())])
+        return proxy
+
+# proxy = ProxyPoolTask().init()
+# for i in range(10):
+#     proxy.get()
+
+# 一定要设置Content-Type值为application/json
+headers={}
+# headers['Content-Type']='application/json'
+headers['Cookie']="_ga=GA1.2.1549448114.1565356207; _ntes_nnid=dd304631d7902d3bad049873a6270018,1566042562983; _ntes_nuid=dd304631d7902d3bad049873a6270018; csrf_token=6ad711bfb7082004872317bc396d13b5a4336c4a; game=csgo; _gid=GA1.2.393649929.1569057473; Locale-Supported=zh-Hans; _gat_gtag_UA_109989484_1=1; NTES_YD_SESS=t6fg6GSwvnZleW7tJK.1XIDJ5Gntd6iVKDHBL.vWUH.6uWdmu57zsxdx.dDQHJSXgy0Xm3LN91zkjgfKPBPEapXNnGoEBu2tHaSF5X6QdHfyct_D62uui9aDqxdnNwf9NF3DhMg_Yjx0wHWVw3MASLKMr4E5hf1O9aS_RUHVMkJKmkLZftakSfJkq9995yUbYLGv9SY5YuAMh80NwC0VqjiQEXK4KY_7wELk9K0qXx7jb; S_INFO=1569146666|0|3&80##|15510592723; P_INFO=15510592723|1569146666|1|netease_buff|00&99|bej&1567432959&netease_buff#bej&null#10#0#0|&0|null|15510592723; session=1-TdwJJmnPZQZHY31B_HnidGb_tcetUfw88zN0Vznft5Pa2043074918"
+url='https://buff.163.com/api/market/goods?game=csgo&page_num=1&category=weapon_deagle&sort_by=price.desc&exterior=wearcategory0&_=1569146666327'
+# data={"username":"ls","password":"toor"}
+# 一定要用json.dumps把data格式化成json
+# r = requests.post(url,headers=headers,data=json.dumps(data),verify=False)
+# 或者直接使用json参数代替data，此时requests会自动进行格式化和设置Content-Type头的工作
+r = requests.get(url,headers=headers,verify=True)
+for i in json.loads(r.content)['data']['items']:
+    print(i)

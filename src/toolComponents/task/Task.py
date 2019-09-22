@@ -24,7 +24,7 @@ class Task(Check):
 
     def print(self, content):
         if CONSTANT.DEBUG:
-            print("[DEBUG] ==> " + content)
+            print("[DEBUG] ==> " + str(content))
 
     def mount(self):
         pass

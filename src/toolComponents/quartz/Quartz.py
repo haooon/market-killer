@@ -27,7 +27,6 @@ class Quartz(Task):
         super().__init__(*args, **kwargs)
         self.quartz_manager = QuartzManager()
         # reset quartz info
-        self.quartz_info = {}
         # 默认5秒执行
         if "interval" not in self.quartz_info.keys():
             self.quartz_info["interval"] = 5
