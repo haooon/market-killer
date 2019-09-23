@@ -15,7 +15,9 @@ class MongoMongo(Task):
     def mount(self):
         pass
 
-    def select(self, collection_name, query={}, scope=None, limit=None) -> dict:
+    def select(self, collection_name, query=None, scope=None, limit=None) -> list:
+        if query is None:
+            query = {}
         data = None
         if limit is None:
             if scope is None:
@@ -28,29 +30,39 @@ class MongoMongo(Task):
             else:
                 data = self.collection[collection_name].find(query, scope).limit(limit)
         data = list(data)
-        self.print("selected records total: " + str(data.__len__()))
+        # self.print("selected records total: " + str(data.__len__()) + '\t' + "coll: " + collection_name)
         return data
 
     def insert(self, collection_name, record) -> None:
         self.collection[collection_name].insert_one(record)
+        self.print("inserted total: " + str(1))
 
-    def update(self, collection_name, value, scope={}, limit=None) -> int:
+    def update(self, collection_name, value, query=None, limit=None):
+        if query is None:
+            query = {}
         if limit == 1:
             self.print("updated records total: " +
-                       str(self.collection[collection_name].update_one(scope, {"$set": value}).modified_count))
+                       str(self.collection[collection_name].update_one(query, {"$set": value}).modified_count) + '\t' +
+                       "coll: " + collection_name)
         elif limit is None:
             self.print("updated records total: " +
-                       str(self.collection[collection_name].update_many(scope, {"$set": value}).modified_count))
+                       str(self.collection[collection_name].update_many(query, {"$set": value}).modified_count) + '\t' +
+                       "coll: " + collection_name)
             pass
 
-    def delete(self, collection_name, scope={}, limit=None):
+    def delete(self, collection_name, query=None, limit=None):
+        if query is None:
+            query = {}
         if limit == 1:
             self.print("removed records total: " +
-                       str(self.collection[collection_name].delete_one(scope).deleted_count))
+                       str(self.collection[collection_name].delete_one(query).deleted_count) + '\t' +
+                       "coll: " + collection_name)
         elif limit is None:
             self.print("removed records total: " +
-                       str(self.collection[collection_name].delete_many(scope).deleted_count))
+                       str(self.collection[collection_name].delete_many(query).deleted_count) + '\t' +
+                       "coll: " + collection_name)
             pass
+
     def handle(self) -> None:
         self.client = pymongo.MongoClient(
             'mongodb://' + CONSTANT.MONGO.USER + ':' + CONSTANT.MONGO.PASSWORD + '@' + CONSTANT.MONGO.URL + ':' + CONSTANT.MONGO.PORT)
@@ -71,11 +83,16 @@ class MongoMongo(Task):
 
     pass
 
-
+#
 # mongo = MongoMongo().init()
 # mongo.insert("test", {"nnn": "RUNOOB", "alexa": "10000", "url": "https://www.runoob.com"})
 # print(mongo.select("test"))
-# mongo.update("test", scope={"nnn": "RUNOOB"}, value={"alexa":'123123'})
+# mongo.update("test", query={"nnn": "RUNOOB"}, value={"alexa":'123123'})
 # print(mongo.select("test"))
 # mongo.delete("test")
 # print(mongo.select("test"))
+
+# 系统设置使用
+# mongo = MongoMongo().init()
+# mongo.insert("sys", {"id": "0", "item_collection_total_page": 627, "item_collection_total_count": 12533})
+# print(mongo.select("sys"))

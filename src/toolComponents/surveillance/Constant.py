@@ -42,6 +42,11 @@ class MONGO:
     DATABASE = "app"
     COLLECTIONS = [
         "test",
+        "item",
+        # 系统
+        "sys",
+        # 系统历史
+        "sys_history",
     ]
 
 @Singleton

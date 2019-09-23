@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
-from src.toolComponents.decorator.Synchronized import Synchronized
+from src.toolComponents.decorator.SynchronizedImpl import Synchronized
 
-# 单利类
+# Singleton类
 def Singleton(cls):
     instances = {}
     @Synchronized

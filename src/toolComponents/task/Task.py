@@ -6,6 +6,7 @@ from src.toolComponents.task.TaskManager import TaskManager
 
 class Task(Check):
     info = None
+
     def init(self, *args, **kwargs):
         __manager = TaskManager()
         self.info = {}
@@ -24,7 +25,10 @@ class Task(Check):
 
     def print(self, content):
         if CONSTANT.DEBUG:
-            print("[DEBUG] ==> " + str(content))
+            print("[DEBUG] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(content))
+
+    def error(self, content):
+        print("[ERROR] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(content))
 
     def mount(self):
         pass
