@@ -81,4 +81,5 @@ class ItemCollectionTask(Quartz):
                     self.mongo.insert("item", item)
                     self.print("add item completed, item name: " + str(item['market_hash_name']))
             self.print("url: " + url)
+            self.print("Cookie: " + self.header_pool[0])
             self.print("page: " + str(page) + " completed!")

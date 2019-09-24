@@ -21,9 +21,9 @@ class Main(Task):
     def run(self):
         if self.run_flag != True:
             TaskManager()
-            MongoMongo().init()
-            SysTask().init()
-            ItemCollectionTask().init()
+            MongoMongo().init(self.KEY)
+            SysTask().init(self.KEY)
+            ItemCollectionTask().init(self.KEY)
             # quartzTest().init(self.KEY)
             self.run_flag = True
             return "Task started"
