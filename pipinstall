@@ -1,5 +1,6 @@
 flask
 schedule
 beautifulsoup4
+flask_cors
 pymongo
 requests
