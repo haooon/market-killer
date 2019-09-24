@@ -1,4 +1,5 @@
 flask
+schedule
 beautifulsoup4
 pymongo
 requests
