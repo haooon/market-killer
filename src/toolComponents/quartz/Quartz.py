@@ -34,15 +34,18 @@ class Quartz(Task):
         if "delay" in self.quartz_info.keys():
             if self.quartz_info["delay"]:
                 # schedule 延迟模式
+                self.loop()
                 self.__quartz = schedule.every(self.quartz_info["interval"]).seconds.do(self.loop)
                 self.quartz_info["type"] = "delay quartz"
                 self.quartz_info["delay"] = True
             else:
                 # schedule 非延迟模式 线程模式
+                self.thread_loop()
                 self.__quartz = schedule.every(self.quartz_info["interval"]).seconds.do(self.thread_loop)
                 self.quartz_info["type"] = "threat quartz"
                 self.quartz_info["delay"] = False
         else:
+            self.thread_loop()
             self.__quartz = schedule.every(self.quartz_info["interval"]).seconds.do(self.thread_loop)
             self.quartz_info["type"] = "threat quartz"
             self.quartz_info["delay"] = False

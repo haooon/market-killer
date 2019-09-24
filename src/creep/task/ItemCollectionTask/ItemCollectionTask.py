@@ -30,7 +30,7 @@ class ItemCollectionTask(Quartz):
     sys = None
 
     def loop(self):
-        self.handle()
+        self.creep()
 
     def mount(self):
         self.mongo = MongoMongo()
@@ -38,7 +38,7 @@ class ItemCollectionTask(Quartz):
         self.total_page = self.sys.get_item_collection_total_page()
         self.total_count = self.sys.get_item_collection_total_count()
 
-    def handle(self):
+    def creep(self):
         for i in range(129, self.total_page):
             page = str(i + 1)
             # 获取 物品 列表 url
@@ -68,7 +68,7 @@ class ItemCollectionTask(Quartz):
                     self.print("item total page modified, total page: " + str(new_total_page))
                     self.total_page = new_total_page
                     self.sys.set_item_collection_total_page(new_total_page)
-                    self.handle()
+                    self.creep()
                     return
 
             for item in data['items']:
@@ -82,8 +82,3 @@ class ItemCollectionTask(Quartz):
                     self.print("add item completed, item name: " + str(item['market_hash_name']))
             self.print("url: " + url)
             self.print("page: " + str(page) + " completed!")
-
-
-MongoMongo().init()
-SysTask().init()
-ItemCollectionTask().init()

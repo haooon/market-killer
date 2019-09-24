@@ -2,7 +2,10 @@
 import threading
 import time
 
+from src.creep.sysTask.SysTask import SysTask
+from src.creep.task.ItemCollectionTask.ItemCollectionTask import ItemCollectionTask
 from src.sysComponents.api.Api import Api
+from src.sysComponents.mongo.MongoTask import MongoMongo
 from src.toolComponents.quartz.QuartzManager import QuartzManager
 from src.toolComponents.quartz.test.quartzTest import quartzTest
 from src.toolComponents.task.Task import Task
@@ -18,7 +21,10 @@ class Main(Task):
     def run(self):
         if self.run_flag != True:
             TaskManager()
-            quartzTest().init(self.KEY)
+            MongoMongo().init()
+            SysTask().init()
+            ItemCollectionTask().init()
+            # quartzTest().init(self.KEY)
             self.run_flag = True
             return "Task started"
 
@@ -28,7 +34,4 @@ class Main(Task):
         time.sleep(5)
         self.run()
 
-if __name__ == '__main__':
-    Main().init()
-    while True:
-        pass
+
