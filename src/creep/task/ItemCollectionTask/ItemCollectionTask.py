@@ -39,7 +39,7 @@ class ItemCollectionTask(Quartz):
         self.total_count = self.sys.get_item_collection_total_count()
 
     def creep(self):
-        for i in range(129, self.total_page):
+        for i in range(180, self.total_page):
             page = str(i + 1)
             # 获取 物品 列表 url
             # url = 'https://buff.163.com/api/market/goods?game=csgo&page_num=' + page + '&_=' + str(int(round(time.time() * 1000)))

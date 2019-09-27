@@ -80,10 +80,10 @@ class MongoMongo(Task):
             self.collection[coll] = self.db[coll]
             self.print("fetch collection: " + str(coll))
         pass
-
     pass
 
-#
+
+# 测试使用
 # mongo = MongoMongo().init()
 # mongo.insert("test", {"nnn": "RUNOOB", "alexa": "10000", "url": "https://www.runoob.com"})
 # print(mongo.select("test"))
@@ -92,7 +92,14 @@ class MongoMongo(Task):
 # mongo.delete("test")
 # print(mongo.select("test"))
 
+
 # 系统设置使用
 # mongo = MongoMongo().init()
 # mongo.insert("sys", {"id": "0", "item_collection_total_page": 627, "item_collection_total_count": 12533})
 # print(mongo.select("sys"))
+
+
+# 转化字段 string ("123") => int (123)
+# mongo = MongoMongo().init()
+# for i in mongo.select("item", scope={'id': 1, 'buy_max_price': 1}):
+#     mongo.update("item", query={'id': i['id']}, value={'buy_max_price': float(i['buy_max_price'])})
