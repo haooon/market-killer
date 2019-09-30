@@ -33,6 +33,7 @@ class ProxyPoolTask(Quartz):
         self.debug(proxy)
         return proxy
 
-# proxy = ProxyPoolTask().init()
-# for i in range(10):
-#     proxy.get()
+
+proxy = ProxyPoolTask().init()
+for i in range(10):
+    proxy.get()

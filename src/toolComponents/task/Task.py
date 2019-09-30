@@ -1,4 +1,5 @@
 # -*- utf-8 -*-
+from src.toolComponents.decorator.Decorator import Red, Blue, Yellow, Black
 from src.toolComponents.surveillance.CheckPoint import Check
 from src.toolComponents.surveillance.Constant import CONSTANT
 from src.toolComponents.task.TaskManager import TaskManager
@@ -29,19 +30,26 @@ class Task(Check):
         else:
             return self
 
-    def print(self, content):
+    # @Yellow
+    @Black
+    def print(self, *args):
         if CONSTANT.DEBUG:
-            print("[DEBUG::PRINT] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(content))
+            info = ""
+            for arg in args:
+                info += str(arg)
+            return "[DEBUG::PRINT] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
 
+    @Yellow
     def debug(self, *args):
         if CONSTANT.DEBUG:
             info = ""
             for arg in args:
                 info += str(arg)
-            print("[DEBUG::INFO] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info))
+            return "[DEBUG::INFO] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
 
+    @Red
     def error(self, content):
-        print("[DEBUG::ERROR] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(content))
+        return "[DEBUG::ERROR] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(content)
 
     def mount(self):
         pass

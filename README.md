@@ -1,15 +1,4 @@
-# How to create a Smart Task with Creep Task
-
-
-
-
-
-## What is a Smart TASK ?
-
-Health Check
-Check Point
-Tasks Manager
-Application interface
+# How to create a Task Collection with TaskCC
 
 ## HOW TO USE
 
@@ -93,7 +82,7 @@ class taskA(Task):
         pass
 ```
 
-#### 4. Special Task Usage
+#### 6. Special Task Usage
 
 ```python
 class quartzTest(Quartz):
@@ -115,7 +104,8 @@ class quartzTest(Quartz):
 
 ```
 
+##### 6.1 Quartz
 
+##### 6.2 OneWayTask
 
-##### Quartz
-
+6.3 TreadTask

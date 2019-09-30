@@ -30,7 +30,7 @@ class MongoMongo(Task):
             else:
                 data = self.collection[collection_name].find(query, scope).limit(limit)
         data = list(data)
-        # self.print("selected records total: " + str(data.__len__()) + '\t' + "coll: " + collection_name)
+        self.print("selected records total: " + str(data.__len__()) + '\t' + "coll: " + collection_name)
         return data
 
     def insert(self, collection_name, record) -> None:
