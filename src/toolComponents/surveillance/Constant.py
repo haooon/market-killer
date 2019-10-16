@@ -14,6 +14,7 @@ class CHECKPOINT:
     # 用于查看任务健康度
     CHECK_MAX_HISTORY = 100
 
+
 @Singleton
 class TASK:
     # 任务运行状态：运行中
@@ -26,17 +27,16 @@ class TASK:
     DEAD = "DEAD"
     # 基础健康度
     BASIC_HEALTH = 100
+    # 线程池大小
+    POOL_MAX_SIZE = 4
 
 
 @Singleton
 class MONGO:
     # 地址
     URL = "39.105.99.88"
-    # 端口
     PORT = "27017"
-    # 用户名
     USER = "haooon"
-    # 密码
     PASSWORD = "1141135276Shr"
     # 库
     DATABASE = "app"
@@ -49,10 +49,12 @@ class MONGO:
         "sys_history",
     ]
 
+# 代理池
 @Singleton
 class ProxyPool:
     # 地址
     URL = "http://39.105.99.88:8899/api/v1/proxies?limit=9999"
+
 
 @Singleton
 class CONSTANT:

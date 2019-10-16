@@ -10,7 +10,7 @@ class TaskManager:
     __main_key = None
     __task_dict = None
     __task_list = None
-    info = {
+    properties = {
         "name": "task manager",
         "status": CONSTANT.TASK.RUNNING,
         "health": 100
@@ -28,40 +28,40 @@ class TaskManager:
     def get_task_health(self, task):
         tmplist = []
         sum = 0
-        if task["info"]["kids"].__len__() > 0:
-            for son in task["info"]["kids"]:
+        if task["properties"]["kids"].__len__() > 0:
+            for son in task["properties"]["kids"]:
                 tmplist.append(self.get_task_health(son))
         else:
-             return task["info"]["health"]
+             return task["properties"]["health"]
         for i in tmplist:
             sum += i
-        task["info"]["health"] = sum / tmplist.__len__()
-        return task["info"]["health"]
+        task["properties"]["health"] = sum / tmplist.__len__()
+        return task["properties"]["health"]
 
     def register(*args):
         self = args[0]
         task = args[1]
-        task.info["kids"] = []
-        key = task.info["key"] = str(uuid.uuid1())
-        if "name" not in task.info.keys():
-            task.info["name"] = task.__class__.__name__
-        if "status" not in task.info.keys():
-            task.info["status"] = CONSTANT.TASK.RUNNING
-        if "health" not in task.info.keys():
-            task.info["health"] = CONSTANT.TASK.BASIC_HEALTH
+        task.properties["kids"] = []
+        key = task.properties["key"] = str(uuid.uuid1())
+        if "name" not in task.properties.keys():
+            task.properties["name"] = task.__class__.__name__
+        if "status" not in task.properties.keys():
+            task.properties["status"] = CONSTANT.TASK.RUNNING
+        if "health" not in task.properties.keys():
+            task.properties["health"] = CONSTANT.TASK.BASIC_HEALTH
         if args.__len__() > 2:
             father_key = args[2]
             for tmp_task in self.__task_list:
-                if tmp_task["info"]["key"] == father_key:
-                    task.info["father"] = father_key
-                    tmp_task["info"]["kids"].append({"info": task.info})
+                if tmp_task["properties"]["key"] == father_key:
+                    task.properties["father"] = father_key
+                    tmp_task["properties"]["kids"].append({"properties": task.properties})
                     break
         else:
-            self.__task_dict.append({"info": task.info})
+            self.__task_dict.append({"properties": task.properties})
         self.__task[key] = task
-        self.__task_list.append({"info": task.info})
-        print("register: ", task.info["name"])
-        if task.info["name"] in ['main', 'Main']:
+        self.__task_list.append({"properties": task.properties})
+        print("register: ", task.properties["name"])
+        if task.properties["name"] in ['main', 'Main']:
             self.__main_key = key
         return key
 
@@ -75,22 +75,22 @@ class TaskManager:
         return self.__task[key]
 
     def suspend_task(self, key):
-        self.__task[key].info["status"] = CONSTANT.TASK.SUSPEND
-        # self.__task[key].info["health"] = 50
-        for task in self.__task[key].info["kids"]:
-            self.suspend_task(task["info"]["key"])
-        return {"info": self.__task[key].info}
+        self.__task[key].properties["status"] = CONSTANT.TASK.SUSPEND
+        # self.__task[key].properties["health"] = 50
+        for task in self.__task[key].properties["kids"]:
+            self.suspend_task(task["properties"]["key"])
+        return {"properties": self.__task[key].properties}
 
     def restart_task(self, key):
-        self.__task[key].info["status"] = CONSTANT.TASK.RUNNING
-        # self.__task[key].info["health"] = 50
-        for task in self.__task[key].info["kids"]:
-            self.restart_task(task["info"]["key"])
-        return {"info": self.__task[key].info}
+        self.__task[key].properties["status"] = CONSTANT.TASK.RUNNING
+        # self.__task[key].properties["health"] = 50
+        for task in self.__task[key].properties["kids"]:
+            self.restart_task(task["properties"]["key"])
+        return {"properties": self.__task[key].properties}
 
     def get_task_dict(self):
         return self.__task_dict[0]
-        # main = {"info": {
+        # main = {"properties": {
         #     "name": "main",
         #     "status": CONSTANT.TASK.RUNNING,
         #     "health": 100,

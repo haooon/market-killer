@@ -1,30 +1,25 @@
 # -*- utf-8 -*-
-import threading
+from concurrent.futures.thread import ThreadPoolExecutor
+from typing import Callable
 
 from src.toolComponents.decorator.Decorator import Singleton
-from src.toolComponents.task.Task import Task
+from src.toolComponents.surveillance.Constant import CONSTANT
 
 
 @Singleton
-class ThreadPool(Task):
+class TaskThreadPool:
     __pool = {}
+    __executor = None
 
-    def mount(self):
-        pass
+    def init(self):
+        self.__executor = ThreadPoolExecutor(max_workers=CONSTANT.TASK.POOL_MAX_SIZE)
 
-    def handle(self):
-        pass
+    def add(self, func, params=None):
+        if not isinstance(func, Callable):
+            self.error(func, " is not Callable")
+        else:
+            if params is None:
+                self.__executor.submit(func)
+            else:
+                self.__executor.submit(func, params)
 
-    def thread(self, target, **args):
-        new = threading.Thread(target=target, **args)
-        self.debug(new)
-        new.start()
-        pass
-    pass
-
-def test():
-    print("testfunfunfun")
-
-# https://www.jianshu.com/p/7b6a80faf33f
-ThreadPool().init().thread(test)
-print(threading.Event())
