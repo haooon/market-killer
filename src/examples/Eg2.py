@@ -1,6 +1,4 @@
 # -*- utf-8 -*-
-import time
-
 from src.toolComponents.cache.CacheTask import CacheTask
 from src.toolComponents.pool.ThreadPool.ThreadPool import TaskThreadPool
 from src.toolComponents.task.Task import Task
@@ -12,18 +10,20 @@ class Test(Task):
         # 参数cache初始化，挂入父级KEY（表示嵌套关系）
         self.cache = CacheTask().init(self.KEY)
         # 载入参数「1，2，3，4，5」 参数为 list 类型
-        # 需要多参数时 可load([[1,11,111], [2,22,222], [3,33,333]])
-        # 需要多参数时 可load([{"param1":1, "param2":2, "param3":3}])
         self.cache.load([1, 2, 3, 4, 5])
 
     # Test任务所提供的逻辑服务代码，需要参数
     def get(self, a):
-        self.blue(a)
+        self.print(a)
 
-# 初始化线程池
-TaskThreadPool().init()
-pool = TaskThreadPool()
-# 初始化任务
-t = Test().init()
-# Task中invoke方法载入参数，调用函数
-t.invoke(t.get, t.cache)
+if __name__ == '__main__':
+    # 初始化线程池
+    TaskThreadPool().init()
+    # 初始化任务
+    t = Test().init()
+    # Task中invoke方法载入参数，调用函数
+    t.invoke(t.get, t.cache)
+
+# 需要多参数时 可load([[1,11,111], [2,22,222], [3,33,333]])
+# 需要多参数时 可load([{"param1":1, "param2":2, "param3":3}])
+# CONSTANT 中 CONSTANT.Cache.MAXSYN 值为 cache运行同时刻最大缓冲数

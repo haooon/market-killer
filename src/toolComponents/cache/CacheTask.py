@@ -62,19 +62,32 @@ class CacheTask(Task):
         cache_list = list(self.__waiting_cache.keys())
         if cache_list.__len__() == 0:
             return NoneObj()
+        if self.__running_count >= cache_list.__len__():
+            return NoneObj()
         key = cache_list[self.__running_count]
+        data = self.__waiting_cache.get(key)
         self.__running_count += 1
-        return {"key": key, "data": self.__waiting_cache.get(key)}
+        self.__running_cache[key] = data
+        return {"key": key, "data": data}
 
-    # get waiting cache suspended cache and running cache
-    def cache(self):
+    # get waiting cache
+    def waiting(self):
         return self.__waiting_cache.__str__()
+
+    # get running cache
+    def running(self):
+        return self.__running_cache.__str__()
+
+    # get suspended cache
+    def suspended(self):
+        return self.__suspended_cache.__str__()
 
     # pop from cache and then pop back to update the running count
     @Synchronized
     def pop_back(self, key):
         self.__running_count -= 1
         self.__waiting_cache.pop(key)
+        self.__running_cache.pop(key)
 
 
 

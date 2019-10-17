@@ -1,15 +1,16 @@
 # -*- utf-8 -*-
-from src.toolComponents.decorator.Decorator import Red, Blue, Yellow, Black
 from src.toolComponents.pool.ThreadPool.ThreadPool import TaskThreadPool
 from src.toolComponents.surveillance.CheckPoint import Check
 from src.toolComponents.surveillance.Constant import CONSTANT, NoneObj
+from src.toolComponents.task.Debug import Debug
 from src.toolComponents.task.TaskManager import TaskManager
 
 
-class Task(Check):
+class Task(Check, Debug):
     # 防止单利模式下重复init
     un_inited = True
     properties = None
+    thread_pool = TaskThreadPool().init()
 
     def init(self, *args, **kwargs):
         if self.un_inited:
@@ -26,47 +27,23 @@ class Task(Check):
                 father_key = args[0]
                 self.KEY = __manager.register(self, father_key)
             self.mount()
-            TaskThreadPool().add(self.handle)
+            self.handle()
             return self
         else:
             return self
 
-    @Black
-    def print(self, *args):
-        if CONSTANT.DEBUG:
-            info = ""
-            for arg in args:
-                info += str(arg)
-            return "[DEBUG::PRINT] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
-
-    @Yellow
-    def debug(self, *args):
-        if CONSTANT.DEBUG:
-            info = ""
-            for arg in args:
-                info += str(arg)
-            return "[DEBUG::INFOO] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
-
-    @Blue
-    def blue(self, *args):
-        if CONSTANT.DEBUG:
-            info = ""
-            for arg in args:
-                info += str(arg)
-            return "[DEBUG::BLUEE] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
-
-    @Red
-    def error(self, *args):
-        info = ""
-        for arg in args:
-            info += str(arg)
-        return "[DEBUG::ERROR] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
+    def invoke_callback(self, *args):
+        _cache = args[0]
+        func = args[1]
+        param = args[2]
+        func(param.get("data"))
+        _cache.pop_back(param.get("key"))
 
     def invoke(self, func, cache):
         param = cache.pop()
         while not isinstance(param, NoneObj):
-            func(param.get("data"))
-            cache.pop_back(param["key"])
+            args = (cache, func, param)
+            self.thread_pool.add(self.invoke_callback, params=args)
             param = cache.pop()
 
     def mount(self):

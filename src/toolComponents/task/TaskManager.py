@@ -15,12 +15,16 @@ class TaskManager:
         "status": CONSTANT.TASK.RUNNING,
         "health": 100
     }
+    __uninit = True
 
-    def __init__(self):
-        __main_key = ""
-        self.__task_list = []
-        self.__task_dict = []
-        self.__task = {}
+    def init(self):
+        if(self.__uninit):
+            __main_key = ""
+            self.__task_list = []
+            self.__task_dict = []
+            self.__task = {}
+            self.__uninit = False
+        return self
 
     def health(self):
         return self.get_task_health(self.get_task_dict())
@@ -88,7 +92,10 @@ class TaskManager:
         return {"properties": self.__task[key].properties}
 
     def get_task_dict(self):
-        return self.__task_dict[0]
+        if self.__task_dict.__len__() > 0:
+            return self.__task_dict[0]
+        else:
+            return {}
         # main = {"properties": {
         #     "name": "main",
         #     "status": CONSTANT.TASK.RUNNING,
@@ -96,3 +103,5 @@ class TaskManager:
         #     "kids": self.__task_dict
         # }}
         # return main
+# 初始化
+TaskManager().init()
