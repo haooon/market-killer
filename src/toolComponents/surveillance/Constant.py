@@ -49,11 +49,24 @@ class MONGO:
         "sys_history",
     ]
 
+
 # 代理池
 @Singleton
 class ProxyPool:
     # 地址
     URL = "http://39.105.99.88:8899/api/v1/proxies?limit=9999"
+
+
+# 代理池
+@Singleton
+class Cache:
+    # simultaneous max running tasks
+    MAXSYN = 5
+
+
+# none obj
+class NoneObj:
+    pass
 
 
 @Singleton
@@ -66,9 +79,11 @@ class CONSTANT:
     MONGO = MONGO()
     # 代理
     PROXYPOOL = ProxyPool()
+    # cache
+    Cache = Cache()
     # 系统用 变量值
     DEBUG = True
-
+    # 健康值存储历史
     CHECK_POINT_MAX_HISTORY = 20
 
 

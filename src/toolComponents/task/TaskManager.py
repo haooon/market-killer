@@ -60,7 +60,6 @@ class TaskManager:
             self.__task_dict.append({"properties": task.properties})
         self.__task[key] = task
         self.__task_list.append({"properties": task.properties})
-        print("register: ", task.properties["name"])
         if task.properties["name"] in ['main', 'Main']:
             self.__main_key = key
         return key

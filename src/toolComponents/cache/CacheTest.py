@@ -1,26 +1,25 @@
 # -*- utf-8 -*-
 from src.toolComponents.cache.CacheTask import CacheTask
 from src.toolComponents.pool.ThreadPool.ThreadPool import TaskThreadPool
+from src.toolComponents.task.Task import Task
 
-a = {}
-a["123"] = 123
-a["222"] = 222
-a["333"] = 333
-a["444"] = 444
-a["555"] = 555
-a["666"] = 666
+# 继承Task基类
+class Test(Task):
+    # 挂载参数cache
+    def mount(self):
+        # 参数cache初始化，挂入父级KEY（表示嵌套关系）
+        self.cache = CacheTask().init(self.KEY)
+        # 载入参数「1，2，3，4，5」
+        self.cache.load([1, 2, 3, 4, 5])
 
-for i in range(a.__len__()):
-    print(list(a.values())[i])
+    # Test任务所提供的逻辑服务代码，需要参数
+    def get(self, a):
+        self.print(a)
 
+# 初始化线程池
 TaskThreadPool().init()
-cache = CacheTask().init()
-cache.add("a")
-key = cache.add("b")
-cache.add("c")
-cache.cache()
-print(cache.pop())
-cache.add("d")
-print(key)
-cache.remove(key)
-cache.cache()
+# 初始化任务
+t = Test().init()
+# Task中invoke方法载入参数，调用函数
+t.invoke(t.get, t.cache)
+

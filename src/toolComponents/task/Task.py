@@ -2,7 +2,7 @@
 from src.toolComponents.decorator.Decorator import Red, Blue, Yellow, Black
 from src.toolComponents.pool.ThreadPool.ThreadPool import TaskThreadPool
 from src.toolComponents.surveillance.CheckPoint import Check
-from src.toolComponents.surveillance.Constant import CONSTANT
+from src.toolComponents.surveillance.Constant import CONSTANT, NoneObj
 from src.toolComponents.task.TaskManager import TaskManager
 
 
@@ -31,7 +31,6 @@ class Task(Check):
         else:
             return self
 
-    # @Yellow
     @Black
     def print(self, *args):
         if CONSTANT.DEBUG:
@@ -46,7 +45,15 @@ class Task(Check):
             info = ""
             for arg in args:
                 info += str(arg)
-            return "[DEBUG::INFO] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
+            return "[DEBUG::INFOO] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
+
+    @Blue
+    def blue(self, *args):
+        if CONSTANT.DEBUG:
+            info = ""
+            for arg in args:
+                info += str(arg)
+            return "[DEBUG::BLUEE] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
 
     @Red
     def error(self, *args):
@@ -54,6 +61,13 @@ class Task(Check):
         for arg in args:
             info += str(arg)
         return "[DEBUG::ERROR] ==> " + "[" + self.__class__.__name__ + "] >>> " + str(info)
+
+    def invoke(self, func, cache):
+        param = cache.pop()
+        while not isinstance(param, NoneObj):
+            func(param.get("data"))
+            cache.pop_back(param["key"])
+            param = cache.pop()
 
     def mount(self):
         pass
@@ -71,4 +85,5 @@ class Task(Check):
         return self.info
 
     def __del__(self):
-        self.print("del object")
+        # self.print("del object")
+        pass
