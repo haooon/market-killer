@@ -1,4 +1,5 @@
 # -*- utf-8 -*-
+from concurrent import futures
 from concurrent.futures.thread import ThreadPoolExecutor
 from typing import Callable
 
@@ -27,9 +28,9 @@ class TaskThreadPool:
             self.error(func, " is not Callable")
         else:
             if params is None:
-                self.__executor.submit(func)
+                return self.__executor.submit(func)
                 # self.__executor.submit(self.futurerrr, future)
             else:
-                self.__executor.submit(func, *params)
+                return self.__executor.submit(func, *params)
                 # self.__executor.submit(self.futurerrr, future)
 

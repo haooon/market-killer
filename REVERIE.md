@@ -19,6 +19,20 @@ docker run -d -p 8899:8899 -p 8081:8081 -v /var/www/scylla:/var/www/scylla --nam
 docker 跑项目
 docker build -t market-killer:1.0 .
 docker run -d -p 8888:8888 --name market-killer -v /docker/steam:/market-killer market-killer:1.0 python /market-killer/market-killer/main.py
+
+mkdir -p /docker/neo4j/data
+mkdir -p /docker/neo4j/logs
+mkdir -p /docker/neo4j/conf
+
+docker run \
+    --detach \
+    --publish=7474:7474 --publish=7687:7687 \
+    --volume=/docker/neo4j/data:/data \
+    --volume=/docker/neo4j/logs:/logs \
+    --volume=/docker/neo4j/conf:/conf \
+    --env=NEO4J_AUTH=neo4j/1141135276Shr \
+    neo4j
+
 ```
 
 
@@ -42,3 +56,7 @@ elasticsearch（python接口支持）
 模式识别，学习功能。
 
 bob project
+
+smart city
+
+

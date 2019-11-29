@@ -24,3 +24,5 @@ if __name__ == '__main__':
     t = Test().init()
     # 使用任务逻辑服务
     t.test()
+
+

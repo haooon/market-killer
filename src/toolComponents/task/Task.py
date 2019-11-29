@@ -4,19 +4,55 @@ from src.toolComponents.surveillance.CheckPoint import Check
 from src.toolComponents.surveillance.Constant import CONSTANT, NoneObj
 from src.toolComponents.task.Debug import Debug
 from src.toolComponents.task.TaskManager import TaskManager
-
+import time
 
 class Task(Check, Debug):
     # 防止单利模式下重复init
-    un_inited = True
+    __un_inited = True
+    # 配置参数
     properties = None
+    # 数据缓存通道
+    __cache_channel = {}
+    # 线程池(global)
     thread_pool = TaskThreadPool().init()
 
+    IN = None
+    OUT = None
+
+    def get_cache(self, channel_name) -> object:
+        return self.__cache_channel.get(channel_name)
+
+    def load_cache(self, channel_name, cache, delay=None) -> None:
+        #  生产者延迟数
+        if delay is not None:
+            time.sleep(delay)
+        self.__cache_channel[channel_name] = cache
+
+    def active(self, *args, **kwargs):
+        delay = kwargs.get("delay")
+        # 调用参数
+        if self.IN is None:
+            pass
+        else:
+            param = self.IN.get()
+            while True:
+                #  消费者延迟数
+                if delay is not None:
+                    time.sleep(delay)
+                else:
+                    future = self.thread_pool.add(self.run, params=param)
+                    future_list.append(future)
+                    for future in futures.as_completed(
+                            future_list):  # 通过result()方法获取结果 res = future.result() print(res, future) result.append(res)
+                    self.IN["confirm"]()
+                    param = self.self.IN["pop"]()
+
     def init(self, *args, **kwargs):
-        if self.un_inited:
-            self.un_inited = False
+        if self.__un_inited:
+            self.__un_inited = False
             __manager = TaskManager()
             self.properties = {}
+            self.__cache_channel = {}
             if args.__len__() == 0:
                 if "father" in kwargs.keys():
                     father_key = kwargs["father"]
@@ -46,8 +82,25 @@ class Task(Check, Debug):
             self.thread_pool.add(self.invoke_callback, params=args)
             param = cache.pop()
 
+    def continued_invoke(self, func, cache, delay=None):
+        param = cache.pop()
+        while True:
+            #  消费者延迟数
+            if delay is not None:
+                time.sleep(delay)
+            if isinstance(param, NoneObj):
+                param = cache.pop()
+                continue
+            else:
+                args = (cache, func, param)
+                self.thread_pool.add(self.invoke_callback, params=args)
+                param = cache.pop()
+
     def mount(self):
         pass
+
+    def run_background(self, method, args=None):
+        self.thread_pool.add(method, params=args)
 
     def handle(self):
         pass
